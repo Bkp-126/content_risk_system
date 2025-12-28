@@ -1,0 +1,6 @@
+ultralytics
+paddlepaddle
+paddleocr
+openai
+streamlit
+pandas
