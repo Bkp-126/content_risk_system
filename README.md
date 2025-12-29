@@ -38,13 +38,13 @@ graph TD
     end
 
     subgraph "L2 云端裁决层 (VLM Cloud)"
-        B -- 命中疑似目标 -- D{Qwen-VL-Plus 深度语义推理}
-        C -- 提取敏感变体 -- D
+        B -- "命中疑似目标" --> D(Qwen-VL-Plus 深度语义推理)
+        C -- "提取敏感变体" --> D
     end
 
     subgraph "L3 策略执行引擎 (Policy Engine)"
-        D --> E{Policy Matching}
-        E -- 读取 rules.yaml -- F[最终裁决 Action]
+        D --> E(Policy Matching)
+        E -- "读取 rules.yaml" --> F(最终裁决 Action)
     end
 
     F --> G[结果输出: 封禁/警告/放行]
