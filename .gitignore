@@ -1,10 +1,38 @@
-# .gitignore
+# Python 编译缓存
 __pycache__/
 *.py[cod]
+*$py.class
+
+# 虚拟环境
 venv/
+.venv/
+env/
+
+# 敏感配置文件 (核心：保护你的 sk- 密钥)
 .env
+
+# IDE 配置文件
 .idea/
 .vscode/
-models/
+
+# 项目安装产生的临时文件
+*.egg-info/
+build/
+dist/
+
+# 大体量模型权重文件 (根目录下的 yolo11n.pt 等)
+*.pt
+*.onnx
+*.weights
+
+# 日志与临时数据
 logs/
-*.DS_Store
+*.log
+
+# 补充以下内容：
+*.pt
+*.onnx
+*.egg-info/
+build/
+dist/
+.DS_Store
