@@ -1,50 +1,32 @@
-# 🛡️ 多模态实时内容风控与策略决策系统 (Content-Risk-System)
+# 多模态内容安全风控系统 (V2.0)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" />
-  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" />
-  <img src="https://img.shields.io/badge/Streamlit-1.28+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" />
-  <img src="https://img.shields.io/badge/NVIDIA-RTX%205070%20Ti-76B900?style=for-the-badge&logo=nvidia&logoColor=white" />
-</p>
+本项目提供一套基于视觉检测与多模态语义分析的直播内容审计方案。系统通过端到端的异步决策链路，实现了对复杂业务场景下违规内容的精准识别与实时裁决。
 
-> **面向短视频/直播高并发场景的端云协同风控方案** > 运行环境：**Windows 11(开发验证) / Ubuntu 22.04(推荐生产环境）** | **Python 3.10** | **RTX 5070 Ti**
+## 技术亮点
 
-本项目针对内容审核场景中“全量大模型审计成本极高、纯本地规则误报严重”的痛点，设计并实现了 **Funnel (漏斗) 分层架构**。系统利用边缘端 GPU 资源拦截 95% 以上的安全流量，仅针对疑难帧调用云端 VLM 进行深度语义决策，实现性能、成本与精度的最优平衡。
+* **变体文本识别 (Adversarial Text Recovery)**：针对利用拟声词、谐音字及特殊符号组合绕过传统关键词库的违规引流行为，利用 VLM 的语义推断能力进行穿透审计。
+* **推理性能优化 (Inference Latency Optimization)**：通过图像动态预处理策略与大模型 Token 约束，将端到端审计耗时压降至 2.5s 左右，解决了多模态模型在实时风控中的高延迟瓶颈。
+* **多维裁决引擎 (Multi-layer Decision Engine)**：集成目标检测 (L1)、语义审计 (L2) 与规则策略 (L3) 三层架构，确保裁决动作的准确性与合规性。
+
+## 系统架构
+
+1. **L1 视觉感官层**: 基于 YOLO11s 执行物体检测，并同步利用 OCR 提取画面文本片段。
+2. **L2 语义决策层**: 基于 Qwen-VL-Plus 对图文组合内容进行深度关联审计，判定是否存在违规意图。
+3. **L3 策略执行层**: 根据 `rules.yaml` 配置的业务阈值，实时执行拦截 (Block) 或通过 (Pass) 动作。
+
+## 性能表现
+
+| 审计维度 | 裁决动作 | 平均响应耗时 (Avg. Latency) | 风险判定能力 |
+| :--- | :--- | :--- | :--- |
+| 高危文本引流 | 拦截 | 2.8s | 支持谐音/变体穿透识别 |
+| 复杂图文违规 | 拦截 | 3.2s | 支持场景化意图审计 |
+| 正常商业合规内容 | 通过 | 1.2s | 低分值安全放行 |
+
+## 快速部署
+
+1. **环境准备**: `pip install -r requirements.txt`
+2. **密钥配置**: 在 `.env` 中配置 `DASHSCOPE_API_KEY`。
+3. **启动服务**: `python app.py`
 
 ---
-
-## 📖 目录
-- [🏗️ 系统架构](#️-系统架构)
-- [✨ 核心功能](#-核心功能)
-- [🛠️ 技术深度: 工程难点与挑战](#️-技术深度-工程难点与挑战)
-- [📈 性能表现](#-性能表现)
-- [🚀 快速部署](#-快速部署)
-- [📜 策略配置示例](#-策略配置示例)
-
----
-
-## 🏗️ 系统架构
-
-系统遵循 **感知(L1) -> 决策(L2) -> 执行(L3)** 的设计哲学：
-
-[Image of a multi-layer hierarchical software architecture diagram]
-
-```mermaid
-graph TD
-    subgraph "L1 边缘感知层 (Local GPU)"
-        A[视频流捕获] --> B[YOLOv11 违规物体检测]
-        B --> C[EasyOCR 敏感文本抓取]
-    end
-
-    subgraph "L2 云端裁决层 (VLM Cloud)"
-        B -- "命中疑似目标" --> D(Qwen-VL-Plus 深度语义推理)
-        C -- "提取敏感变体" --> D
-    end
-
-    subgraph "L3 策略执行引擎 (Policy Engine)"
-        D --> E(Policy Matching)
-        E -- "读取 rules.yaml" --> F(最终裁决 Action)
-    end
-
-    F --> G[结果输出: 封禁/警告/放行]
+*License: Apache 2.0*
