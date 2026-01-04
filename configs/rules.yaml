@@ -1,26 +1,21 @@
 # 内容风控策略配置文件
-version: "1.0.0"
-description: "通用直播/短视频风控策略"
+version: "1.2.0"
 
-# 策略列表
 rules:
   - rule_id: "POL_001"
-    name: "广告与引流违规"
     category: "Ad"
-    risk_threshold: 65
-    action: "warn"
+    risk_threshold: 50  # 30分以上就触发动作
+    action: "block"     # 修改：将 warn 改为 block，强制拦截引流
     label_cn: "广告引流"
 
   - rule_id: "POL_002"
-    name: "危险道具与暴力"
     category: "Violence"
-    risk_threshold: 70
+    risk_threshold: 35
     action: "block"
-    label_cn: "危险道具"
+    label_cn: "危险道具/色情诱导"
 
   - rule_id: "POL_003"
-    name: "通用合规检查"
     category: "Normal"
-    risk_threshold: 90 # 正常内容如果分数极高，可能存在误判，需人工复审
-    action: "pass"
-    label_cn: "合规"
+    risk_threshold: 70
+    action: "pass"      # 保持放行
+    label_cn: "合规"    # 修改：纠正为“合规”
