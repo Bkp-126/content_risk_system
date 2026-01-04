@@ -1,21 +1,22 @@
-# 内容风控策略配置文件
-version: "1.2.0"
+# configs/rules.yaml
 
 rules:
-  - rule_id: "POL_001"
-    category: "Ad"
-    risk_threshold: 50  # 30分以上就触发动作
-    action: "block"     # 修改：将 warn 改为 block，强制拦截引流
-    label_cn: "广告引流"
+  - category: "Normal"
+    label_cn: "合规"
+    risk_threshold: 999
+    action: "pass"
 
-  - rule_id: "POL_002"
-    category: "Violence"
-    risk_threshold: 35
+  - category: "Ad"
+    label_cn: "引流/联系方式"
+    risk_threshold: 75
     action: "block"
-    label_cn: "危险道具/色情诱导"
 
-  - rule_id: "POL_003"
-    category: "Normal"
+  - category: "Sex"
+    label_cn: "色情/擦边"
     risk_threshold: 70
-    action: "pass"      # 保持放行
-    label_cn: "合规"    # 修改：纠正为“合规”
+    action: "block"
+
+  - category: "Gambling"
+    label_cn: "赌博/博彩"
+    risk_threshold: 75
+    action: "block"
